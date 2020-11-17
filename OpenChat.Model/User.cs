@@ -8,10 +8,15 @@ namespace OpenChat.Model
 
         public static User Create(string name, string about)
         {
-            if (String.IsNullOrEmpty(name))
-                throw new InvalidOperationException(MSG_CAN_NOT_REGISTER_USER_WITH_EMPTY_NAME);
+            AssertNameIsNotEmpty(name);
 
             return new User(name, about);
+        }
+
+        private static void AssertNameIsNotEmpty(string name)
+        {
+            if (String.IsNullOrEmpty(name))
+                throw new InvalidOperationException(MSG_CAN_NOT_REGISTER_USER_WITH_EMPTY_NAME);
         }
 
         public Guid Id { get; }
@@ -25,9 +30,9 @@ namespace OpenChat.Model
             About = about;
         }
 
-        internal bool IsNamed(string userName)
+        internal bool IsNamed(string name)
         {
-            return Name.Equals(userName);
+            return Name.Equals(name);
         }
     }
 }

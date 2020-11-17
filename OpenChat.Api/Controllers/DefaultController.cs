@@ -8,8 +8,11 @@ namespace OpenChat.Api.Controllers
     [ApiController]
     public class DefaultController : ControllerBase
     {
+        private readonly OpenChatSystem system;
+
         public DefaultController(ILogger<DefaultController> logger)
         {
+            system = new OpenChatSystem();
         }
 
         [HttpGet("/openchat/")]
@@ -21,8 +24,6 @@ namespace OpenChat.Api.Controllers
         [HttpPost("/openchat/registration")]
         public ObjectResult RegisterUser([FromBody] RegistrationRequest request)
         {
-            var system = new OpenChatSystem();
-
             try
             {
                 var user = system.RegisterUser(request.username, request.password, request.about);

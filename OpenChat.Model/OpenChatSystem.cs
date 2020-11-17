@@ -30,9 +30,9 @@ namespace OpenChat.Model
             return registeredUsers.Count();
         }
 
-        private void AssertNewUserNameIsNotRegistered(string userName)
+        private void AssertNewUserNameIsNotRegistered(string name)
         {
-            if (registeredUsers.Any(user => user.IsNamed(userName)))
+            if (registeredUsers.Any(user => user.IsNamed(name)))
                 throw new InvalidOperationException(MSG_USER_NAME_ALREADY_IN_USE);
         }
     }
