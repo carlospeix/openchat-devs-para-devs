@@ -55,7 +55,6 @@ namespace OpenChat.IntegrationTests
             Assert.Equal(alice.username, (string)user.username);
         }
 
-
         private static HttpContent GetJsonFrom(object content)
         {
             return new StringContent(

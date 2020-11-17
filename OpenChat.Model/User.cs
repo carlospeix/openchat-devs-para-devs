@@ -6,6 +6,9 @@ namespace OpenChat.Model
     {
         public static User Create(string name, string about)
         {
+            if (String.IsNullOrEmpty(name))
+                throw new InvalidOperationException("Can not register user with empty name.");
+
             return new User(name, about);
         }
 

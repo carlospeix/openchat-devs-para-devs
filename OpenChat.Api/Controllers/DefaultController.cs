@@ -23,9 +23,15 @@ namespace OpenChat.Api.Controllers
         {
             var system = new OpenChatSystem();
 
-            var user = system.RegisterUser(request.username, request.password, request.about);
-
-            return new CreatedResult("", new UserResult(user));
+            try
+            {
+                var user = system.RegisterUser(request.username, request.password, request.about);
+                return new CreatedResult("", new UserResult(user));
+            }
+            catch (InvalidOperationException ioe)
+            {
+                return new BadRequestObjectResult(ioe.Message);
+            }
         }
     }
     public class RegistrationRequest
