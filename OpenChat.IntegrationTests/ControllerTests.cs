@@ -7,8 +7,11 @@ namespace OpenChat.IntegrationTests
 {
     public class ControllerTests
     {
+        private readonly DefaultController controller;
+
         public ControllerTests()
         {
+            controller = new DefaultController(new OpenChatSystem(), null);
         }
 
         // Register New User
@@ -17,8 +20,6 @@ namespace OpenChat.IntegrationTests
         [Fact]
         public void Registration_UserWithEmptyMailFails()
         {
-            var controller = new DefaultController(null);
-
             // Act
             var result = controller.RegisterUser(new RegistrationRequest("", "irrelevant", "irrelevant"));
 

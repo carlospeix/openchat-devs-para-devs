@@ -10,9 +10,9 @@ namespace OpenChat.Api.Controllers
     {
         private readonly OpenChatSystem system;
 
-        public DefaultController(ILogger<DefaultController> logger)
+        public DefaultController(OpenChatSystem system, ILogger<DefaultController> logger)
         {
-            system = new OpenChatSystem();
+            this.system = system;
         }
 
         [HttpGet("/openchat/")]
@@ -33,6 +33,14 @@ namespace OpenChat.Api.Controllers
             {
                 return new BadRequestObjectResult(ioe.Message);
             }
+        }
+
+        [HttpPost("/openchat/login")]
+        public ObjectResult LoginUser([FromBody] LoginRequest request)
+        {
+            var user = system.LoginUser(request.username, request.password);
+
+            return new OkObjectResult(new UserResult(user));
         }
     }
     public class RegistrationRequest
@@ -60,5 +68,16 @@ namespace OpenChat.Api.Controllers
         public Guid userId;
         public string username;
         public string about;
+    }
+    public class LoginRequest
+    {
+        public LoginRequest(string userName, string password)
+        {
+            this.username = userName;
+            this.password = password;
+        }
+
+        public string username;
+        public string password;
     }
 }

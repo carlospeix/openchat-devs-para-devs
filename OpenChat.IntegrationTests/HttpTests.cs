@@ -55,6 +55,27 @@ namespace OpenChat.IntegrationTests
             Assert.Equal(alice.username, (string)user.username);
         }
 
+        // Login
+        // POST - openchat/login { "username" : "Alice" "password" : "alki324d" }
+        // Success Status OK - 200 Response: { "userId" : "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" "username" : "Alice", "about" : "I love playing the piano and travelling." }
+        // Failure Status: BAD_REQUEST - 400 Response: "Invalid credentials."
+        [Fact]
+        public async Task Login_WithRegisteredUserSucceeds()
+        {
+            // Arrange
+            var marta = new { username = "Marta", password = "password0", about = "irrelevant" };
+            _ = await client.PostAsync("/openchat/registration", GetJsonFrom(marta));
+
+            // Act
+            var aliceLogin = new { username = "Marta", password = "password0" };
+            var response = await client.PostAsync("/openchat/login", GetJsonFrom(aliceLogin));
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            dynamic user = await GetContentFromAsync(response);
+            Assert.Equal(marta.username, (string)user.username);
+        }
+
         private static HttpContent GetJsonFrom(object content)
         {
             return new StringContent(
