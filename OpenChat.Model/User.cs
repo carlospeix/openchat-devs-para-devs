@@ -4,10 +4,12 @@ namespace OpenChat.Model
 {
     public class User
     {
+        public const string MSG_CAN_NOT_REGISTER_USER_WITH_EMPTY_NAME = "Can not register user with empty name.";
+
         public static User Create(string name, string about)
         {
             if (String.IsNullOrEmpty(name))
-                throw new InvalidOperationException("Can not register user with empty name.");
+                throw new InvalidOperationException(MSG_CAN_NOT_REGISTER_USER_WITH_EMPTY_NAME);
 
             return new User(name, about);
         }

@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using OpenChat.Api.Controllers;
+using OpenChat.Model;
 using Xunit;
 
 namespace OpenChat.IntegrationTests
@@ -16,14 +17,14 @@ namespace OpenChat.IntegrationTests
         [Fact]
         public void Registration_UserWithEmptyMailFails()
         {
-            var controller = new DefaultController();
+            var controller = new DefaultController(null);
 
             // Act
             var result = controller.RegisterUser(new RegistrationRequest("", "irrelevant", "irrelevant"));
 
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, (HttpStatusCode)result.StatusCode);
-            Assert.Equal("Can not register user with empty name.", (string)result.Value);
+            Assert.Equal(User.MSG_CAN_NOT_REGISTER_USER_WITH_EMPTY_NAME, (string)result.Value);
         }
     }
 }
