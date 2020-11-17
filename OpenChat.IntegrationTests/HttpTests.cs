@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -32,6 +33,26 @@ namespace OpenChat.IntegrationTests
             dynamic result = await GetContentFromAsync(response);
             Assert.Equal("Up", (string)result.status);
         }
+
+        // Register New User
+        // POST - openchat/registration { "username" : "Alice", "password" : "alki324d", "about" : "I love playing the piano and travelling." }
+        // Success Status CREATED - 201 Response: { "userId" : "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" "username" : "Alice", "about" : "I love playing the piano and travelling." }
+        // Failure Status: BAD_REQUEST - 400 Response: "Username already in use."
+        [Fact]
+        public async Task Registration_NewUserRegistrationSucceeds()
+        {
+            // Arrange
+            var alice = new { username = "Alice", password = "irrelevant", about = "irrelevant" };
+
+            // Act
+            var response = await client.PostAsync("/openchat/registration", GetJsonFrom(alice));
+
+            // Assert
+            Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+            dynamic user = await GetContentFromAsync(response);
+            Assert.Equal(alice.username, (string)user.username);
+        }
+
 
         private static HttpContent GetJsonFrom(object content)
         {
