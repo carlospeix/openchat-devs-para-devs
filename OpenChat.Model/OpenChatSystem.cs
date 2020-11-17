@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OpenChat.Api.Controllers
+namespace OpenChat.Model
 {
     public class OpenChatSystem
     {

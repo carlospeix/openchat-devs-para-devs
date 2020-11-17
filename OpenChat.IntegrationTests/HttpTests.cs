@@ -62,10 +62,10 @@ namespace OpenChat.IntegrationTests
                 JsonConvert.SerializeObject(content), Encoding.UTF8, "application/json");
         }
 
-        private static async Task<dynamic> GetContentFromAsync(HttpResponseMessage httpResponse)
+        private static async Task<dynamic> GetContentFromAsync(HttpResponseMessage response)
         {
             return JsonConvert.DeserializeObject<dynamic>(
-                await httpResponse.Content.ReadAsStringAsync());
+                await response.Content.ReadAsStringAsync());
         }
     }
 }
