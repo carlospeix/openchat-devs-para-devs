@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -50,6 +51,7 @@ namespace OpenChat.IntegrationTests
             // Assert
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
             dynamic user = await GetContentFromAsync(response);
+            Assert.NotEqual(Guid.Empty, (Guid)user.userId);
             Assert.Equal(alice.username, (string)user.username);
         }
 

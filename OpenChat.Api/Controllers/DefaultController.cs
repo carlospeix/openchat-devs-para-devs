@@ -20,9 +20,11 @@ namespace OpenChat.Api.Controllers
         [HttpPost("/openchat/registration")]
         public ObjectResult RegisterUser([FromBody] RegistrationRequest request)
         {
-            var user = new { userId = Guid.Empty, username = request.username, about = request.about };
+            var system = new OpenChatSystem();
 
-            return new CreatedResult("", user);
+            var user = system.RegisterUser(request.username, request.password, request.about);
+
+            return new CreatedResult("", new UserResult(user));
         }
     }
     public class RegistrationRequest
@@ -36,6 +38,19 @@ namespace OpenChat.Api.Controllers
 
         public string username;
         public string password;
+        public string about;
+    }
+    public class UserResult
+    {
+        public UserResult(User user)
+        {
+            userId = user.Id;
+            username = user.Name;
+            about = user.About;
+        }
+
+        public Guid userId;
+        public string username;
         public string about;
     }
 }
