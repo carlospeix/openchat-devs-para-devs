@@ -24,5 +24,10 @@ namespace OpenChat.Model
             Name = name;
             About = about;
         }
+
+        internal bool IsNamed(string userName)
+        {
+            return Name.Equals(userName);
+        }
     }
 }
