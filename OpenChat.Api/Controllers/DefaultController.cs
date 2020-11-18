@@ -9,10 +9,12 @@ namespace OpenChat.Api.Controllers
     public class DefaultController : ControllerBase
     {
         private readonly OpenChatSystem system;
+        private readonly ILogger<DefaultController> logger;
 
         public DefaultController(OpenChatSystem system, ILogger<DefaultController> logger)
         {
             this.system = system;
+            this.logger = logger;
         }
 
         [HttpGet("/openchat/")]
@@ -24,15 +26,9 @@ namespace OpenChat.Api.Controllers
         [HttpPost("/openchat/registration")]
         public ObjectResult RegisterUser([FromBody] RegistrationRequest request)
         {
-            try
-            {
-                var user = system.RegisterUser(request.username, request.password, request.about);
-                return new CreatedResult("", new UserResult(user));
-            }
-            catch (InvalidOperationException ioe)
-            {
-                return new BadRequestObjectResult(ioe.Message);
-            }
+            return DispatchRequest(
+                () => system.RegisterUser(request.username, request.password, request.about),
+                (user) => new CreatedResult($"/openchat/users/{user.Id}", new UserResult(user)));
         }
 
         [HttpPost("/openchat/login")]
@@ -42,6 +38,18 @@ namespace OpenChat.Api.Controllers
             {
                 var user = system.LoginUser(request.username, request.password);
                 return new OkObjectResult(new UserResult(user));
+            }
+            catch (InvalidOperationException ioe)
+            {
+                return new BadRequestObjectResult(ioe.Message);
+            }
+        }
+
+        public ObjectResult DispatchRequest<T>(Func<T> action, Func<T, ObjectResult> success)
+        {
+            try
+            {
+                return success(action.Invoke());
             }
             catch (InvalidOperationException ioe)
             {

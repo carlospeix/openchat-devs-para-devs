@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using Microsoft.Extensions.Logging.Abstractions;
 using OpenChat.Api.Controllers;
 using OpenChat.Model;
 using Xunit;
@@ -11,7 +12,7 @@ namespace OpenChat.IntegrationTests
 
         public ControllerTests()
         {
-            controller = new DefaultController(new OpenChatSystem(), null);
+            controller = new DefaultController(new OpenChatSystem(), NullLogger<DefaultController>.Instance);
         }
 
         // Register New User
@@ -46,6 +47,5 @@ namespace OpenChat.IntegrationTests
             Assert.Equal(HttpStatusCode.BadRequest, (HttpStatusCode)result.StatusCode);
             Assert.Equal(OpenChatSystem.MSG_INVALID_CREDENTIALS, result.Value);
         }
-
     }
 }
