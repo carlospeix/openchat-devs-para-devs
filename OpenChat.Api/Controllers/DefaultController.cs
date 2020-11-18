@@ -38,9 +38,15 @@ namespace OpenChat.Api.Controllers
         [HttpPost("/openchat/login")]
         public ObjectResult LoginUser([FromBody] LoginRequest request)
         {
-            var user = system.LoginUser(request.username, request.password);
-
-            return new OkObjectResult(new UserResult(user));
+            try
+            {
+                var user = system.LoginUser(request.username, request.password);
+                return new OkObjectResult(new UserResult(user));
+            }
+            catch (InvalidOperationException ioe)
+            {
+                return new BadRequestObjectResult(ioe.Message);
+            }
         }
     }
     public class RegistrationRequest

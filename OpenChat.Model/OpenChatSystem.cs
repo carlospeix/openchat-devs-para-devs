@@ -7,6 +7,7 @@ namespace OpenChat.Model
     public class OpenChatSystem
     {
         public const string MSG_USER_NAME_ALREADY_IN_USE = "Username already in use.";
+        public const string MSG_INVALID_CREDENTIALS = "Invalid credentials.";
 
         private readonly IList<User> registeredUsers;
         private readonly IDictionary<User, Credential> registeredCredentials;
@@ -45,7 +46,10 @@ namespace OpenChat.Model
             var user = registeredCredentials.SingleOrDefault(
                 (kvp) => kvp.Key.IsNamed(userName) && kvp.Value.WithPassword(password)).Key;
 
-             return user;
+            if (user == default(User))
+                throw new InvalidOperationException(MSG_INVALID_CREDENTIALS);
+
+            return user;
         }
     }
 }
