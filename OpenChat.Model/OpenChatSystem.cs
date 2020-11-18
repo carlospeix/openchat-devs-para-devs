@@ -23,8 +23,9 @@ namespace OpenChat.Model
             AssertNewUserNameIsNotRegistered(name);
 
             var user = User.Create(name, about);
-            var credential = Credential.Create(password);
             registeredUsers.Add(user);
+            
+            var credential = Credential.Create(password);
             registeredCredentials.Add(user, credential);
 
             return user;
